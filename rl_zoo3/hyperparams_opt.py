@@ -15,17 +15,19 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     :param trial:
     :return:
     """
-    batch_size = trial.suggest_categorical("batch_size", [8, 16, 32, 64, 128, 256, 512])
+    batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_float("learning_rate", 1e-5, 1, log=True)
-    ent_coef = trial.suggest_float("ent_coef", 0.00000001, 0.1, log=True)
+    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])
+    learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])
+    ent_coef = trial.suggest_float("ent_coef", 0.00000001, 0.2, log=True)
+    ent_coef = trial.suggest_categorical("ent_coef", [1e-05, 3e-05, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])
-    n_epochs = trial.suggest_categorical("n_epochs", [1, 5, 10, 20])
-    gae_lambda = trial.suggest_categorical("gae_lambda", [0.8, 0.9, 0.92, 0.95, 0.98, 0.99, 1.0])
+    n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])
+    gae_lambda = 0.9 # Suggested by What Matters for on-policy deep actor-critic methods paper
     max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 5])
     vf_coef = trial.suggest_float("vf_coef", 0, 1)
     net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium"])
+
     # Uncomment for gSDE (continuous actions)
     # log_std_init = trial.suggest_float("log_std_init", -4, 1)
     # Uncomment for gSDE (continuous action)
@@ -50,7 +52,7 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     net_arch = {
         "tiny": dict(pi=[64], vf=[64]),
         "small": dict(pi=[64, 64], vf=[64, 64]),
-        "medium": dict(pi=[256, 256], vf=[256, 256]),
+        "medium": dict(pi=[128, 128], vf=[128, 128]),
     }[net_arch_type]
 
     activation_fn = {"tanh": nn.Tanh, "relu": nn.ReLU, "elu": nn.ELU, "leaky_relu": nn.LeakyReLU}[activation_fn_name]
@@ -86,7 +88,7 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
     hyperparams = sample_ppo_params(trial, n_actions, n_envs, additional_args)
 
     enable_critic_lstm = trial.suggest_categorical("enable_critic_lstm", [False, True])
-    lstm_hidden_size = trial.suggest_categorical("lstm_hidden_size", [16, 32, 64, 128, 256, 512])
+    lstm_hidden_size = trial.suggest_categorical("lstm_hidden_size", [64, 128, 256])
 
     hyperparams["policy_kwargs"].update(
         {
