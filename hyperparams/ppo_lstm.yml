@@ -537,10 +537,59 @@ Walker2d-v4:
   max_grad_norm: 1
   vf_coef: 0.871923
 
-# NASim Environments:
-SmallGenPO-v0:
-  #normalize: true
+# NASim Environments
+
+# NASim Static Environments
+SmallPO-v0:
   n_envs: 8
-  n_timesteps: !!float 4e5
+  n_timesteps: !!float 2e5
   policy: 'MlpLstmPolicy'
+
+MediumPO-v0:
+  n_envs: 8
+  n_timesteps: !!float 2e6
+  policy: 'MlpLstmPolicy'
+
+LargePO-v0:
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpLstmPolicy'
+
+# NASim Generated Environments with Stochastic Epside Starts
+SmallGenPO-v0:
   env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpLstmPolicy'
+
+MediumGenPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e6
+  policy: 'MlpLstmPolicy'
+
+LargeGenPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpLstmPolicy'
+
+# NASim Generated Environments with Stochastic Epside Starts and Random Goal
+SmallGenRgoalPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpLstmPolicy'
+
+MediumGenRgoalPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e6
+  policy: 'MlpLstmPolicy'
+
+LargeGenRgoalPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpLstmPolicy'
+
