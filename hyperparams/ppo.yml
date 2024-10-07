@@ -580,3 +580,31 @@ Walker2d-v4:
   gae_lambda: 0.95
   max_grad_norm: 1
   vf_coef: 0.871923
+
+# NASim Environments:
+TinyPO-v0:
+  #normalize: true
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+  env_wrapper: nasim.envs.wrappers.AggregatedObsWrapper
+
+SmallPO-v0:
+  #normalize: true
+  env_wrapper: nasim.envs.wrappers.AggregatedObsWrapper
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+
+SmallGenPO-v0:
+  #normalize: true
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+
+Small-v0:
+  #normalize: true
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'

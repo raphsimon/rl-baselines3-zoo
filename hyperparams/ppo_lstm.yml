@@ -536,3 +536,11 @@ Walker2d-v4:
   gae_lambda: 0.95
   max_grad_norm: 1
   vf_coef: 0.871923
+
+# NASim Environments:
+SmallGenPO-v0:
+  #normalize: true
+  n_envs: 8
+  n_timesteps: !!float 4e5
+  policy: 'MlpLstmPolicy'
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts

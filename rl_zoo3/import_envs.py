@@ -21,6 +21,11 @@ else:
     np.float = np.float32  # type: ignore[attr-defined]
 
 try:
+    import nasim
+except ImportError:
+    print("Could not import nasim. Please make sure it is installed.")
+
+try:
     import custom_envs
 except ImportError:
     pass
