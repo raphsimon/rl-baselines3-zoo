@@ -19,7 +19,6 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])
     learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])
-    ent_coef = trial.suggest_float("ent_coef", 0.00000001, 0.2, log=True)
     ent_coef = trial.suggest_categorical("ent_coef", [1e-05, 3e-05, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])
