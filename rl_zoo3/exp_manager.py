@@ -161,7 +161,8 @@ class ExperimentManager:
         self.pruner = pruner
         self.n_startup_trials = n_startup_trials
         self.n_evaluations = n_evaluations
-        self.deterministic_eval = not (self.is_atari(env_id) or self.is_minigrid(env_id))
+        self.deterministic_eval = not (self.is_atari(env_id) or self.is_minigrid(env_id) or self.is_nasim(env_id))
+        print(f"Deterministic eval: {self.deterministic_eval}")
         self.device = device
 
         # Logging
@@ -534,6 +535,10 @@ class ExperimentManager:
     def is_minigrid(env_id: str) -> bool:
         return "minigrid" in ExperimentManager.entry_point(env_id)
 
+    @staticmethod
+    def is_nasim(env_id: str) -> bool:
+        return "NASimGymEnv" in ExperimentManager.entry_point(env_id)
+    
     @staticmethod
     def is_bullet(env_id: str) -> bool:
         return "pybullet_envs" in ExperimentManager.entry_point(env_id)
