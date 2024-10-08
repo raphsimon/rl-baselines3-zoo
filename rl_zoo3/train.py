@@ -156,6 +156,9 @@ def train() -> None:
     parser.add_argument(
         "-tags", "--wandb-tags", type=str, default=[], nargs="+", help="Tags for wandb run, e.g.: -tags optimized pr-123"
     )
+    parser.add_argument(
+        "-job-id", "--slurm-job-id", type=int, default=None, help="Slurm job id, just for testing."
+    )
 
     args = parser.parse_args()
 
