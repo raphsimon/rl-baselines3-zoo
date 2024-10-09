@@ -5,7 +5,7 @@ This means this is the stochastic environment, but fully observable.
 
 
 hyperparams = {
-    "SmallPO-v0": dict(
+    "SmallGen-v0": dict(
         n_envs=4,
         n_timesteps=400_000,
         policy="MlpPolicy",
