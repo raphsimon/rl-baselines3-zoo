@@ -23,7 +23,7 @@ hyperparams = {
         vf_coef=0.4767344887859415,
         policy_kwargs=dict(
             activation_fn=torch.nn.ReLU,
-            net_arch=dict(pi=[64, 64], vf=[64, 64]),
+            net_arch=dict(pi=[128, 128], vf=[128, 128]),
         ),
     )
 }
