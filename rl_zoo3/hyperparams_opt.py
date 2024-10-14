@@ -25,7 +25,7 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     gae_lambda = 0.9 # Suggested by What Matters for on-policy deep actor-critic methods paper
     max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 5])
     vf_coef = trial.suggest_float("vf_coef", 0, 1)
-    net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "mediumi", "large"])
+    net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium", "large"])
 
     # Uncomment for gSDE (continuous actions)
     # log_std_init = trial.suggest_float("log_std_init", -4, 1)
