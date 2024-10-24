@@ -6,7 +6,7 @@ hyperparams = {
         env_wrapper=["nasim.envs.wrappers.StochasticEpisodeStarts",],
         n_envs=4,
         n_timesteps=5000000,
-        policy="MlpPolicy",
+        policy="MlpLstmPolicy",
         batch_size=128,
         n_steps=256,
         gamma=0.9,
@@ -19,6 +19,8 @@ hyperparams = {
         policy_kwargs=dict(
             activation_fn=torch.nn.ReLU,
             net_arch=dict(pi=[256], vf=[256]),
+            enable_critic_lstm=False,
+            lstm_hidden_size=128,
         ),
     )
 }
