@@ -27,6 +27,7 @@ from sb3_contrib.common.vec_env import AsyncEval
 from stable_baselines3 import HerReplayBuffer
 from stable_baselines3.common.base_class import BaseAlgorithm
 from stable_baselines3.common.callbacks import BaseCallback, CheckpointCallback, EvalCallback, ProgressBarCallback
+from sb3_contrib.common.maskable.callbacks import MaskableEvalCallback
 from stable_baselines3.common.env_util import make_vec_env
 from stable_baselines3.common.noise import NormalActionNoise, OrnsteinUhlenbeckActionNoise
 from stable_baselines3.common.preprocessing import is_image_space, is_image_space_channels_first
@@ -511,15 +512,26 @@ class ExperimentManager:
                 print("Creating test environment")
 
             save_vec_normalize = SaveVecNormalizeCallback(save_freq=1, save_path=self.params_path)
-            eval_callback = EvalCallback(
-                self.create_envs(self.n_eval_envs, eval_env=True),
-                callback_on_new_best=save_vec_normalize,
-                best_model_save_path=self.save_path,
-                n_eval_episodes=self.n_eval_episodes,
-                log_path=self.save_path,
-                eval_freq=self.eval_freq,
-                deterministic=self.deterministic_eval,
-            )
+            if self.algo == "ppo_masked":
+                eval_callback = MaskableEvalCallback(
+                    self.create_envs(self.n_eval_envs, eval_env=True),
+                    callback_on_new_best=save_vec_normalize,
+                    best_model_save_path=self.save_path,
+                    n_eval_episodes=self.n_eval_episodes,
+                    log_path=self.save_path,
+                    eval_freq=self.eval_freq,
+                    deterministic=self.deterministic_eval,
+                )
+            else:
+                eval_callback = EvalCallback(
+                    self.create_envs(self.n_eval_envs, eval_env=True),
+                    callback_on_new_best=save_vec_normalize,
+                    best_model_save_path=self.save_path,
+                    n_eval_episodes=self.n_eval_episodes,
+                    log_path=self.save_path,
+                    eval_freq=self.eval_freq,
+                    deterministic=self.deterministic_eval,
+                )
 
             self.callbacks.append(eval_callback)
 
@@ -743,6 +755,7 @@ class ExperimentManager:
         # Pass n_actions to initialize DDPG/TD3 noise sampler
         # Sample candidate hyperparameters
         sampled_hyperparams = HYPERPARAMS_SAMPLER[self.algo](trial, self.n_actions, n_envs, additional_args)
+        print(f'{sampled_hyperparams=}')
         kwargs.update(sampled_hyperparams)
 
         env = self.create_envs(n_envs, no_log=True)

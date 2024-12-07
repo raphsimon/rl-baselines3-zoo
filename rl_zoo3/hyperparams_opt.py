@@ -100,6 +100,17 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
 
     return hyperparams
 
+def sample_ppo_masked_params(trial: optuna.Trial, n_actions: int, n_envs: int, additional_args: dict) -> Dict[str, Any]:
+    """
+    Sampler for MaskablePPO hyperparams.
+    uses sample_ppo_params(), this function samples for the policy_kwargs
+    :param trial:
+    :return:
+    """
+    hyperparams = sample_ppo_params(trial, n_actions, n_envs, additional_args)
+
+    return hyperparams  
+
 
 def sample_trpo_params(trial: optuna.Trial, n_actions: int, n_envs: int, additional_args: dict) -> Dict[str, Any]:
     """
@@ -548,6 +559,7 @@ HYPERPARAMS_SAMPLER = {
     "tqc": sample_tqc_params,
     "ppo": sample_ppo_params,
     "ppo_lstm": sample_ppo_lstm_params,
+    "ppo_masked": sample_ppo_masked_params,
     "td3": sample_td3_params,
     "trpo": sample_trpo_params,
 }
