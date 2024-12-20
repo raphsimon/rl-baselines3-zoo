@@ -757,6 +757,10 @@ class ExperimentManager:
         # Sample candidate hyperparameters
         sampled_hyperparams = HYPERPARAMS_SAMPLER[self.algo](trial, self.n_actions, n_envs, additional_args)
         print(f'{sampled_hyperparams=}')
+        if "frame_stack" in sampled_hyperparams.keys():
+            self.frame_stack = sampled_hyperparams["frame_stack"]
+            print("Using frame stack of size:", self.frame_stack)
+            del sampled_hyperparams["frame_stack"]
         kwargs.update(sampled_hyperparams)
 
         env = self.create_envs(n_envs, no_log=True)

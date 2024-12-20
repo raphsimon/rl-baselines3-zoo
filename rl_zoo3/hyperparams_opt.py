@@ -177,7 +177,7 @@ def sample_fstacked_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int,
     :param trial:
     :return:
     """
-    n_frames = trial.suggest_categorical("n_frames", [2, 4, 8, 16])
+    frame_stack = trial.suggest_categorical("frame_stack", [2, 4, 8, 16])
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])
@@ -222,7 +222,7 @@ def sample_fstacked_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int,
     activation_fn = {"tanh": nn.Tanh, "relu": nn.ReLU, "elu": nn.ELU, "leaky_relu": nn.LeakyReLU}[activation_fn_name]
 
     return {
-        "frame_stack": n_frames,
+        "frame_stack": frame_stack,
         "n_steps": n_steps,
         "batch_size": batch_size,
         "gamma": gamma,
