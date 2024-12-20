@@ -21,7 +21,7 @@ from stable_baselines3.common.sb2_compat.rmsprop_tf_like import RMSpropTFLike  #
 from stable_baselines3.common.vec_env import DummyVecEnv, SubprocVecEnv, VecEnv, VecFrameStack, VecNormalize
 
 # For custom activation fn
-from torch import nn as nn
+from torch import nn as nn  
 
 ALGOS: Dict[str, Type[BaseAlgorithm]] = {
     "a2c": A2C,
@@ -37,6 +37,7 @@ ALGOS: Dict[str, Type[BaseAlgorithm]] = {
     "trpo": TRPO,
     "ppo_lstm": RecurrentPPO,
     "ppo_masked": MaskablePPO,
+    "fstacked_ppo": PPO,
 }
 
 

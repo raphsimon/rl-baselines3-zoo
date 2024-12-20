@@ -425,6 +425,7 @@ class ExperimentManager:
 
         if "frame_stack" in hyperparams.keys():
             self.frame_stack = hyperparams["frame_stack"]
+            print("Using frame stack of size:", self.frame_stack)
             del hyperparams["frame_stack"]
 
         # import the policy when using a custom policy
