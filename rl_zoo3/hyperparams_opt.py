@@ -551,8 +551,8 @@ def sample_dqn_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     :param trial:
     :return:
     """
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_float("learning_rate", 1e-5, 1, log=True)
+    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])
+    learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])
     batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 100, 128, 256, 512])
     buffer_size = trial.suggest_categorical("buffer_size", [int(1e4), int(5e4), int(1e5), int(1e6)])
     exploration_final_eps = trial.suggest_float("exploration_final_eps", 0, 0.2)
