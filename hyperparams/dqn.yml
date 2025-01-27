@@ -80,3 +80,70 @@ Acrobot-v1:
   exploration_fraction: 0.12
   exploration_final_eps: 0.1
   policy_kwargs: "dict(net_arch=[256, 256])"
+
+# NASim Environments:
+
+# NASim Static Environments
+TinyPO-v0:
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+  env_wrapper: nasim.envs.wrappers.AggregatedObsActionInfoWrapper
+
+SmallPO-v0:
+  env_wrapper: nasim.envs.wrappers.AggregatedObsActionInfoWrapper
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+
+MediumPO-v0:
+  env_wrapper: nasim.envs.wrappers.AggregatedObsActionInfoWrapper
+  n_envs: 8
+  n_timesteps: !!float 2e6
+  policy: 'MlpPolicy'
+
+Small-v0:
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+
+# NASim Generated Environments with Stochastic Epside Starts
+SmallGenPO-v0:
+  #normalize: true
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+
+MediumGenPO-v0:
+  #normalize: true
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e6
+  policy: 'MlpPolicy'
+
+LargeGenPO-v0:
+  #normalize: true
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpPolicy'
+
+# NASim Generated Environments with Stochastic Epside Starts and Random Goal
+SmallGenRgoalPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e5
+  policy: 'MlpPolicy'
+
+MediumGenRgoalPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 2e6
+  policy: 'MlpPolicy'
+
+LargeGenRgoalPO-v0:
+  env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpPolicy'
