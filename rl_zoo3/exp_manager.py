@@ -922,9 +922,10 @@ class ExperimentManager:
                                 states=counted_states,
                             )
                         ],
+                        gc_after_trial=True,
                     )
             else:
-                study.optimize(self.objective, n_jobs=self.n_jobs, n_trials=self.n_trials)
+                study.optimize(self.objective, n_jobs=self.n_jobs, n_trials=self.n_trials, gc_after_trial=True)
         except KeyboardInterrupt:
             pass
 
