@@ -79,6 +79,7 @@ class ExperimentManager:
         hyperparams: Optional[Dict[str, Any]] = None,
         env_kwargs: Optional[Dict[str, Any]] = None,
         eval_env_kwargs: Optional[Dict[str, Any]] = None,
+        deterministic_eval: bool = False,
         trained_agent: str = "",
         optimize_hyperparameters: bool = False,
         storage: Optional[str] = None,
@@ -166,8 +167,9 @@ class ExperimentManager:
         self.pruner = pruner
         self.n_startup_trials = n_startup_trials
         self.n_evaluations = n_evaluations
-        self.deterministic_eval = not (self.is_atari(env_id) or self.is_minigrid(env_id) or self.is_nasim(env_id))
+        self.deterministic_eval = (self.is_atari(env_id) or self.is_minigrid(env_id) or self.is_nasim(env_id)) and deterministic_eval
         print(f"Deterministic eval: {self.deterministic_eval}")
+        input()
         self.device = device
 
         # Logging

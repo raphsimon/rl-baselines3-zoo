@@ -48,6 +48,7 @@ def train() -> None:
     )
     parser.add_argument("--eval-episodes", help="Number of episodes to use for evaluation", default=5, type=int)
     parser.add_argument("--n-eval-envs", help="Number of environments for evaluation", default=1, type=int)
+    parser.add_argument("--deterministic-eval", help="Use deterministic actions for evaluation", action="store_true", default=False)
     parser.add_argument("--save-freq", help="Save the model every n steps (if negative, no checkpoint)", default=-1, type=int)
     parser.add_argument(
         "--save-replay-buffer", help="Save the replay buffer too (when applicable)", action="store_true", default=False
@@ -234,6 +235,7 @@ def train() -> None:
         args.hyperparams,
         args.env_kwargs,
         args.eval_env_kwargs,
+        args.deterministic_eval,
         args.trained_agent,
         args.optimize_hyperparameters,
         args.storage,
