@@ -169,7 +169,6 @@ class ExperimentManager:
         self.n_evaluations = n_evaluations
         self.deterministic_eval = (self.is_atari(env_id) or self.is_minigrid(env_id) or self.is_nasim(env_id)) and deterministic_eval
         print(f"Deterministic eval: {self.deterministic_eval}")
-        input()
         self.device = device
 
         # Logging
