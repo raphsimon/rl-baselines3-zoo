@@ -218,8 +218,10 @@ def enjoy() -> None:  # noqa: C901
                 episode_start=episode_start,
                 deterministic=deterministic,
             )
+            print(action)
             obs, reward, done, infos = env.step(action)
-
+            print("Current number of steps taken:", env.get_attr("steps"))
+            env_size = env.get_attr("current_num_hosts")
             episode_start = done
 
             if not args.no_render:
@@ -240,8 +242,10 @@ def enjoy() -> None:  # noqa: C901
                 if done and not is_atari and args.verbose > 0:
                     # NOTE: for env using VecNormalize, the mean reward
                     # is a normalized reward when `--norm_reward` flag is passed
+                    print(f"Network size: {env_size}")
                     print(f"Episode Reward: {episode_reward:.2f}")
                     print("Episode Length", ep_len)
+                    print("="*40)
                     episode_rewards.append(episode_reward)
                     episode_lengths.append(ep_len)
                     episode_reward = 0.0
