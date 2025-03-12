@@ -668,3 +668,18 @@ LargeGenRgoalPO-v0:
   n_envs: 8
   n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
+
+Gen-v0:
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpPolicy'
+  gamma: 0.95
+  ent_coef: 0.01
+
+GenPO-v0:
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpPolicy'
+  gamma: 0.95
+  ent_coef: 0.01
+
