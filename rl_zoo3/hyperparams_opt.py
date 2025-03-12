@@ -22,7 +22,7 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     ent_coef = trial.suggest_categorical("ent_coef", [0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])                # |V| = 6
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                                  # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                               # |V| = 3
-    gae_lambda = trial.suggest_categorical([0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
+    gae_lambda = trial.suggest_categorical("gea_lambda", [0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
     max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])                 # |V| = 7
     vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                             # |V| = 3
     net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium", "large"])                 # |V| = 4
