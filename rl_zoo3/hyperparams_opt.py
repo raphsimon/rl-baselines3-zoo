@@ -17,14 +17,14 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     """
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                                   # |V| = 4
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])                  # |V| = 9
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])                                         # |V| = 4
+    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.97, 0.99])                                         # |V| = 4
     learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
-    ent_coef = trial.suggest_categorical("ent_coef", [1e-05, 3e-05, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])  # |V| = 8
+    ent_coef = trial.suggest_categorical("ent_coef", [0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])                # |V| = 6
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                                  # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                               # |V| = 3
-    gae_lambda = 0.9 # Suggested by What Matters for on-policy deep actor-critic methods paper
-    max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 5])         # |V| = 9
-    vf_coef = trial.suggest_float("vf_coef", 0, 1)                                                              # |V| = 1
+    gae_lambda = trial.suggest_categorical([0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
+    max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])                 # |V| = 7
+    vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                             # |V| = 3
     net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium", "large"])                 # |V| = 4
 
     # Uncomment for gSDE (continuous actions)
