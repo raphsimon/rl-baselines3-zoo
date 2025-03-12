@@ -669,8 +669,17 @@ LargeGenRgoalPO-v0:
   n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
 
-# NASim Generated Environments with up to m hosts
+Gen-v0:
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpPolicy'
+  gamma: 0.95
+  ent_coef: 0.01
+
 GenPO-v0:
   n_envs: 8
-  n_timesteps: !!float 1e6
+  n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
+  gamma: 0.95
+  ent_coef: 0.01
+

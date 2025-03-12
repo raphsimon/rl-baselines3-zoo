@@ -570,7 +570,7 @@ MediumGenPO-v0:
 
 LargeGenPO-v0:
   env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
-  n_envs: 8
+  n_envs: 4
   n_timesteps: !!float 5e6
   policy: 'MlpLstmPolicy'
 
@@ -592,4 +592,18 @@ LargeGenRgoalPO-v0:
   n_envs: 8
   n_timesteps: !!float 5e6
   policy: 'MlpLstmPolicy'
+
+Gen-v0:
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpLstmPolicy'
+  gamma: 0.95
+  ent_coef: 0.01
+
+GenPO-v0:
+  n_envs: 8
+  n_timesteps: !!float 5e6
+  policy: 'MlpLstmPolicy'
+  gamma: 0.95
+  ent_coef: 0.01
 
