@@ -865,12 +865,12 @@ class ExperimentManager:
         elif "postgresql" in self.storage:
             engine_kwargs = {
                 "poolclass": NullPool,
-                #"connect_args": {
-                #    "connect_timeout": 60,
-                #    "keepalives": 1,
-                #    "keepalives_idle": 30,
-                #    "keepalives_interval": 10
-                #}
+                "connect_args": {
+                    "connect_timeout": 60,
+                    "keepalives": 1,
+                    "keepalives_idle": 30,
+                    "keepalives_interval": 10
+                }
             }
         
         if use_storage_class:
