@@ -16,10 +16,10 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     :return:
     """
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                                   # |V| = 4
-    n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])                  # |V| = 9
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.97, 0.99])                                         # |V| = 4
+    n_steps = trial.suggest_categorical("n_steps", [128, 256, 512, 1024, 2048])                                 # |V| = 5
+    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                                # |V| = 4
     learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
-    ent_coef = trial.suggest_categorical("ent_coef", [0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])                # |V| = 6
+    ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                           # |V| = 6
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                                  # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                               # |V| = 3
     gae_lambda = trial.suggest_categorical("gea_lambda", [0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
