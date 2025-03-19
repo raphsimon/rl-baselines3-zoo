@@ -42,4 +42,4 @@ env.bak/
 venv.bak/
 
 # Cluster
-.out
+*.out
