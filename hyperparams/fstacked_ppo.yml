@@ -667,20 +667,19 @@ Gen-v0:
   ent_coef: 0.01
 
 GenPO-v0:
-  frame_stack: 16
   n_envs: 16
   n_timesteps: !!float 5e6
-  policy: 'MlpPolicy'
-  batch_size: 64
-  clip_range: 0.1
-  ent_coef: 0.03
+  batch_size: 256
+  clip_range: 0.2
+  ent_coef: 0.001
   frame_stack: 16
-  gamma: 0.99
-  learning_rate: 0.0001
-  max_grad_norm: 0.6
-  n_epochs: 5
-  n_steps: 1024
-  vf_coef: 0.8114636716923831
+  gamma: 0.995
+  gea_lambda: 0.9
+  learning_rate: 0.001
+  max_grad_norm: 0.9
+  n_epochs: 10
+  n_steps: 2048
+  vf_coef: 0.7
   policy_kwargs: "dict(
                   ortho_init=False,
                   activation_fn=nn.ReLU,
