@@ -16,16 +16,16 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     :return:
     """
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                                   # |V| = 4
-    n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])                  # |V| = 9
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.97, 0.99])                                         # |V| = 4
-    learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
-    ent_coef = trial.suggest_categorical("ent_coef", [0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])                # |V| = 6
+    n_steps = trial.suggest_categorical("n_steps", [128, 256, 512, 1024, 2048])                                 # |V| = 5
+    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                                # |V| = 4
+    learning_rate = trial.suggest_categorical("learning_rate", [0.00003, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
+    ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                           # |V| = 6
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                                  # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                               # |V| = 3
-    gae_lambda = trial.suggest_categorical("gea_lambda", [0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
+    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
     max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])                 # |V| = 7
     vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                             # |V| = 3
-    net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium", "large"])                 # |V| = 4
+    net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large", "large_2x"])             # |V| = 4
 
     # Uncomment for gSDE (continuous actions)
     # log_std_init = trial.suggest_float("log_std_init", -4, 1)
@@ -86,19 +86,78 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
     :param trial:
     :return:
     """
-    hyperparams = sample_ppo_params(trial, n_actions, n_envs, additional_args)
+    batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                           # |V| = 4
+    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                        # |V| = 4
+    # Use a smaller learning rates for recurrent policies
+    learning_rate = trial.suggest_categorical("learning_rate", [0.00001, 0.00003, 0.0001, 0.0003, 0.001])    # |V| = 5
+    # Reduce sequence length
+    n_steps = trial.suggest_categorical("n_steps", [64, 128, 256, 512])                                 # |V| = 5
+    ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                   # |V| = 6
+    clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                          # |V| = 4
+    n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                       # |V| = 3
+    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.92, 0.95, 0.98])                       # |V| = 4
+    max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])         # |V| = 7
+    vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                     # |V| = 3
+    net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large", "large_2x"])     # |V| = 4
 
-    enable_critic_lstm = trial.suggest_categorical("enable_critic_lstm", [False, True])                     # |V| = 2
-    lstm_hidden_size = trial.suggest_categorical("lstm_hidden_size", [64, 128, 256])                        # |V| = 3
+    # Uncomment for gSDE (continuous actions)
+    # log_std_init = trial.suggest_float("log_std_init", -4, 1)
+    # Uncomment for gSDE (continuous action)
+    # sde_sample_freq = trial.suggest_categorical("sde_sample_freq", [-1, 8, 16, 32, 64, 128, 256])
+    # Orthogonal initialization
+    ortho_init = False
+    # ortho_init = trial.suggest_categorical('ortho_init', [False, True])
+    # activation_fn = trial.suggest_categorical('activation_fn', ['tanh', 'relu', 'elu', 'leaky_relu'])
+    activation_fn_name = trial.suggest_categorical("activation_fn", ["tanh", "relu"])                           # |V| = 2
+    # lr_schedule = "constant"
+    # Uncomment to enable learning rate schedule
+    # lr_schedule = trial.suggest_categorical('lr_schedule', ['linear', 'constant'])
+    # if lr_schedule == "linear":
+    #     learning_rate = linear_schedule(learning_rate)
 
-    hyperparams["policy_kwargs"].update(
-        {
-            "enable_critic_lstm": enable_critic_lstm,
-            "lstm_hidden_size": lstm_hidden_size,
-        }
-    )
+    # TODO: account when using multiple envs
+    if batch_size > n_steps:
+        batch_size = n_steps
 
-    return hyperparams
+    enable_critic_lstm = trial.suggest_categorical("enable_critic_lstm", [False, True])                 # |V| = 2
+    lstm_hidden_size = trial.suggest_categorical("lstm_hidden_size", [64, 128, 256])                    # |V| = 3
+    n_lstm_layers = trial.suggest_categorical("n_lstm_layers", [1, 2])                                  # |V| = 2
+
+    # Independent networks usually work best
+    # when not working with images
+    net_arch = {
+        "tiny": dict(pi=[64], vf=[64]),
+        "small": dict(pi=[64, 64], vf=[64, 64]),
+        "medium": dict(pi=[128, 128], vf=[128, 128]),
+        "large": dict(pi=[256], vf=[256]),
+        "large_2x": dict(pi=[256, 256], vf=[256, 256]),
+    }[net_arch_type]
+
+    activation_fn = {"tanh": nn.Tanh, "relu": nn.ReLU, "elu": nn.ELU, "leaky_relu": nn.LeakyReLU}[activation_fn_name]
+
+    return {
+        "n_steps": n_steps,
+        "batch_size": batch_size,
+        "gamma": gamma,
+        "learning_rate": learning_rate,
+        "ent_coef": ent_coef,
+        "clip_range": clip_range,
+        "n_epochs": n_epochs,
+        "gae_lambda": gae_lambda,
+        "max_grad_norm": max_grad_norm,
+        "vf_coef": vf_coef,
+        # "sde_sample_freq": sde_sample_freq,
+        "policy_kwargs": dict(
+            # log_std_init=log_std_init,
+            net_arch=net_arch,
+            activation_fn=activation_fn,
+            ortho_init=ortho_init,
+            enable_critic_lstm=enable_critic_lstm,
+            lstm_hidden_size=lstm_hidden_size,
+            n_lstm_layers=n_lstm_layers,
+        ),
+    }
+    
 
 def sample_ppo_masked_params(trial: optuna.Trial, n_actions: int, n_envs: int, additional_args: dict) -> Dict[str, Any]:
     """
@@ -110,7 +169,7 @@ def sample_ppo_masked_params(trial: optuna.Trial, n_actions: int, n_envs: int, a
     batch_size = trial.suggest_categorical("batch_size", [8, 16, 32, 64, 128, 256, 512])
     n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])
     gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99, 0.995, 0.999, 0.9999])
-    learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])
+    learning_rate = trial.suggest_categorical("learning_rate", [0.00003, 0.0001, 0.0003, 0.001, 0.003])
     ent_coef = trial.suggest_categorical("ent_coef", [1e-05, 3e-05, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])
     n_epochs = trial.suggest_categorical("n_epochs", [1, 5, 10, 20])
@@ -177,18 +236,18 @@ def sample_fstacked_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int,
     :param trial:
     :return:
     """
-    frame_stack = trial.suggest_categorical("frame_stack", [2, 4, 8, 16])                                       # |V| = 4
+    frame_stack = trial.suggest_categorical("frame_stack", [4, 8, 16, 32])                                      # |V| = 4
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                                   # |V| = 4
-    n_steps = trial.suggest_categorical("n_steps", [8, 16, 32, 64, 128, 256, 512, 1024, 2048])                  # |V| = 9
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])                                         # |V| = 4
-    learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
-    ent_coef = trial.suggest_categorical("ent_coef", [1e-05, 3e-05, 0.0001, 0.0003, 0.001, 0.003, 0.01, 0.03])  # |V| = 8
+    n_steps = trial.suggest_categorical("n_steps", [128, 256, 512, 1024, 2048])                                 # |V| = 5
+    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                                # |V| = 4
+    learning_rate = trial.suggest_categorical("learning_rate", [0.00003, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
+    ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                           # |V| = 6
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                                  # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                               # |V| = 3
-    gae_lambda = 0.9 # Suggested by What Matters for on-policy deep actor-critic methods paper
-    max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.3, 0.5, 0.6, 0.7, 0.8, 0.9, 1, 2, 5])         # |V| = 9
-    vf_coef = trial.suggest_float("vf_coef", 0, 1)                                                              # |V| = 1
-    net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium", "large"])                 # |V| = 4
+    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
+    max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])                 # |V| = 7
+    vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                             # |V| = 3
+    net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large", "large_2x"])             # |V| = 4
 
     # Uncomment for gSDE (continuous actions)
     # log_std_init = trial.suggest_float("log_std_init", -4, 1)
