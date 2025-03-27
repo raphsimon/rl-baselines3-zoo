@@ -8,13 +8,13 @@ GenPO-v0:
   ent_coef: 0.05
   gae_lambda: 0.95
   gamma: 0.995
-  learning_rate: 3e-05
+  learning_rate: 0.00003
   max_grad_norm: 2
   n_epochs: 20
   n_steps: 128
   vf_coef: 0.3
-  policy_kwargs: "dict(                                                                                                                                                       
-                  ortho_init=False, 
-                  activation_fn=nn.Tanh,                                                                                                                                                                                                                                                                                
-                  net_arch=dict(pi=[256], vf=[256]),
+  policy_kwargs: "dict(                                                                                                                         
+                    ortho_init=False,
+                    activation_fn=nn.Tanh,
+		    net_arch=dict(pi=[256], vf=[256])
                 )"
