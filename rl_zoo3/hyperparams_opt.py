@@ -17,12 +17,12 @@ def sample_ppo_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     """
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                                   # |V| = 4
     n_steps = trial.suggest_categorical("n_steps", [128, 256, 512, 1024, 2048])                                 # |V| = 5
-    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                                # |V| = 4
-    learning_rate = trial.suggest_categorical("learning_rate", [0.00003, 0.0001, 0.0003, 0.001, 0.003])           # |V| = 5
-    ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                           # |V| = 6
+    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                                # |V| = 5
+    learning_rate = trial.suggest_categorical("learning_rate", [0.00003, 0.0001, 0.0003, 0.001, 0.003])         # |V| = 5
+    ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                           # |V| = 5
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                                  # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                               # |V| = 3
-    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.95, 0.99]) # Suggested by What Matters for on-policy deep actor-critic methods paper
+    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.95, 0.99])                                     # |V| = 3
     max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])                 # |V| = 7
     vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                             # |V| = 3
     net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large", "large_2x"])             # |V| = 4
@@ -87,7 +87,7 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
     :return:
     """
     batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])                           # |V| = 4
-    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])                        # |V| = 4
+    gamma = trial.suggest_categorical("gamma", [0.99, 0.995, 0.999])                                    # |V| = 3
     # Use a smaller learning rates for recurrent policies
     learning_rate = trial.suggest_categorical("learning_rate", [0.00001, 0.00003, 0.0001, 0.0003, 0.001])    # |V| = 5
     # Reduce sequence length
@@ -95,10 +95,11 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
     ent_coef = trial.suggest_categorical("ent_coef", [0.001, 0.005, 0.01, 0.05, 0.1])                   # |V| = 6
     clip_range = trial.suggest_categorical("clip_range", [0.1, 0.2, 0.3, 0.4])                          # |V| = 4
     n_epochs = trial.suggest_categorical("n_epochs", [5, 10, 20])                                       # |V| = 3
-    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.92, 0.95, 0.98])                       # |V| = 4
+    gae_lambda = trial.suggest_categorical("gae_lambda", [0.9, 0.95, 0.98])                             # |V| = 3
     max_grad_norm = trial.suggest_categorical("max_grad_norm", [0.5, 0.6, 0.7, 0.8, 0.9, 1, 2])         # |V| = 7
     vf_coef = trial.suggest_categorical("vf_coef", [0.3, 0.5, 0.7])                                     # |V| = 3
-    net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large", "large_2x"])     # |V| = 4
+    # We're not using the large_2x because we also have the LSTM as well.
+    net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large"])     # |V| = 3
 
     # Uncomment for gSDE (continuous actions)
     # log_std_init = trial.suggest_float("log_std_init", -4, 1)
@@ -121,7 +122,6 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
 
     enable_critic_lstm = trial.suggest_categorical("enable_critic_lstm", [False, True])                 # |V| = 2
     lstm_hidden_size = trial.suggest_categorical("lstm_hidden_size", [64, 128, 256])                    # |V| = 3
-    n_lstm_layers = trial.suggest_categorical("n_lstm_layers", [1, 2])                                  # |V| = 2
 
     # Independent networks usually work best
     # when not working with images
@@ -154,7 +154,6 @@ def sample_ppo_lstm_params(trial: optuna.Trial, n_actions: int, n_envs: int, add
             ortho_init=ortho_init,
             enable_critic_lstm=enable_critic_lstm,
             lstm_hidden_size=lstm_hidden_size,
-            n_lstm_layers=n_lstm_layers,
         ),
     }
     
