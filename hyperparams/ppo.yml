@@ -677,7 +677,7 @@ Gen-v0:
   ent_coef: 0.01
 
 GenPO-v0:
-  n_envs: 16
+  n_envs: 8
   n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
   batch_size: 128
