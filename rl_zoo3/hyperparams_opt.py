@@ -609,11 +609,11 @@ def sample_dqn_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     :param trial:
     :return:
     """
-    gamma = trial.suggest_categorical("gamma", [0.9, 0.95, 0.98, 0.99])
-    learning_rate = trial.suggest_categorical("learning_rate", [3e-05, 0.0001, 0.0003, 0.001, 0.003])
-    batch_size = trial.suggest_categorical("batch_size", [16, 32, 64, 100, 128, 256, 512])
+    gamma = trial.suggest_categorical("gamma", [0.95, 0.97, 0.99, 0.995, 0.999])
+    learning_rate = trial.suggest_categorical("learning_rate", [0.00003, 0.0001, 0.0003, 0.001, 0.003])
+    batch_size = trial.suggest_categorical("batch_size", [64, 128, 256, 512])
     buffer_size = trial.suggest_categorical("buffer_size", [int(1e4), int(5e4), int(1e5), int(1e6)])
-    exploration_final_eps = trial.suggest_float("exploration_final_eps", 0, 0.2)
+    exploration_final_eps = trial.suggest_float("exploration_final_eps", 0, 0.1)
     exploration_fraction = trial.suggest_float("exploration_fraction", 0, 0.5)
     target_update_interval = trial.suggest_categorical("target_update_interval", [1, 1000, 5000, 10000, 15000, 20000])
     learning_starts = trial.suggest_categorical("learning_starts", [10000]) # Don't think we *really* need to care about this hyperparameter
@@ -622,7 +622,7 @@ def sample_dqn_params(trial: optuna.Trial, n_actions: int, n_envs: int, addition
     subsample_steps = trial.suggest_categorical("subsample_steps", [1, 2, 4, 8])
     gradient_steps = max(train_freq // subsample_steps, 1)
 
-    net_arch_type = trial.suggest_categorical("net_arch", ["tiny", "small", "medium", "large"])
+    net_arch_type = trial.suggest_categorical("net_arch", ["small", "medium", "large"])
 
     net_arch = {"tiny": [64], "small": [64, 64], "medium": [128, 128], "large": [256, 256]}[net_arch_type]
 
