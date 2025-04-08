@@ -680,17 +680,18 @@ GenPO-v0:
   n_envs: 8
   n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
-  batch_size: 128
-  clip_range: 0.2
-  ent_coef: 0.001
-  gae_lambda: 0.99
+  batch_size: 256
+  clip_range: 0.4
+  ent_coef: 0.1
+  gae_lambda: 0.9
   gamma: 0.97
-  learning_rate: 0.001
-  max_grad_norm: 0.5
-  n_epochs: 10
-  n_steps: 2048
-  vf_coef: 0.7
-  policy_kwargs: "dict(                                                                                                                                                       
-                  ortho_init=False,                                                                                                                                           
-                  net_arch=dict(pi=[256, 256], vf=[256, 256]),
+  learning_rate: 0.0003
+  max_grad_norm: 0.6
+  n_epochs: 5
+  n_steps: 1024
+  vf_coef: 0.3
+  policy_kwargs: "dict(
+                  ortho_init=False,
+                  activation_fn=nn.Tanh,
+                  net_arch=dict(pi=[256], vf=[256]),
                 )"

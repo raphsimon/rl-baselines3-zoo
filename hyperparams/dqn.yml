@@ -140,3 +140,14 @@ LargeGenRgoalPO-v0:
 GenPO-v0:
   n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
+  batch_size': 256
+  buffer_size': 1000000
+  exploration_final_eps': 0.0948274749083392
+  exploration_fraction': 0.4848872627869986
+  gamma': 0.97
+  learning_rate': 0.001
+  learning_starts': 10000
+  subsample_steps': 1
+  target_update_interval': 10000
+  train_freq': 128
+  policy_kwargs: "dict(net_arch=[128, 128])"
