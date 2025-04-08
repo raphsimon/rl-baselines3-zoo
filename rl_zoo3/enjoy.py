@@ -218,7 +218,7 @@ def enjoy() -> None:  # noqa: C901
                 episode_start=episode_start,
                 deterministic=deterministic,
             )
-            print(action)
+            print("Action:", action)
             obs, reward, done, infos = env.step(action)
             print("Current number of steps taken:", env.get_attr("steps"))
             env_size = env.get_attr("current_num_hosts")
