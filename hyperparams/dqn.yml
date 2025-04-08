@@ -136,4 +136,7 @@ MediumGenRgoalPO-v0:
 LargeGenRgoalPO-v0:
   env_wrapper: nasim.envs.wrappers.StochasticEpisodeStarts
   n_timesteps: !!float 5e6
+
+GenPO-v0:
+  n_timesteps: !!float 5e6
   policy: 'MlpPolicy'
